@@ -7,7 +7,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <CryptoTracker cryptoName="helium" />
+    <CryptoTracker cryptoName="nervos-network" />
     <ReactQueryDevtools />
     <a
       className="api-link"

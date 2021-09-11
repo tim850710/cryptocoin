@@ -18,12 +18,14 @@ const useGetCardData = (cryptoName, options) => {
 export const formatPrice = (price) => {
   const formatConfig = new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",//USD
+    currency: "TWD",//USD
     minimumFractionDigits: 2
   });
 
   return formatConfig.format(price);
 };
+
+
 
 const formatPlusMinus = (priceChange) => {
   const isPositive = Math.sign(priceChange) >= 0;
@@ -56,6 +58,7 @@ const CryptoTracker = ({ cryptoName }) => {
   if (isLoading) return null;
 
   const { image, name, market_data: marketData } = data;
+  console.log(marketData.current_price)
 
   return (
     <div className={`card ${isExpanded ? "expanded" : "collapsed"}`}>
@@ -70,7 +73,8 @@ const CryptoTracker = ({ cryptoName }) => {
           <img src={image?.large} alt={`${name} logo`} />
           <h3 className="crypto-name">{name}</h3>
           <h4 className="crypto-price">
-            {formatPrice(marketData?.current_price?.usd)}
+            {/* 控制幣別 */}
+            {formatPrice(marketData?.current_price?.twd)}  
             {formatPlusMinus(marketData?.price_change_percentage_24h)}
           </h4>
         </div>

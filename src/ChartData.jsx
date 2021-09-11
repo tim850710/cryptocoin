@@ -11,6 +11,7 @@ import format from "date-fns/format";
 import { formatPrice } from "./CryptoTracker";
 
 const intervals = [
+  
   {
     label: "1D",
     value: 1,
@@ -28,8 +29,8 @@ const intervals = [
     value: 90,
   },
   {
-    label: "6M",
-    value: 180,
+    label: "MAX",
+    value: "max",
   },
 ];
 
@@ -38,7 +39,7 @@ const useGetChartData = (cryptoName, interval, options) => {
     ["chartData", interval],
     async () => {
       const response = await fetch(
-        `https://api.coingecko.com/api/v3/coins/${cryptoName}/market_chart?vs_currency=usd&days=${interval}`
+        `https://api.coingecko.com/api/v3/coins/${cryptoName}/market_chart?vs_currency=twd&days=${interval}` //currency 控制幣別
       );
       return await response.json();
     },
@@ -48,6 +49,22 @@ const useGetChartData = (cryptoName, interval, options) => {
 
 const ChartData = ({ cryptoName, isExpanded }) => {
   const [dataInterval, setDataInterval] = useState(intervals[0].value);
+  const formatDate = (timeStamp) => {
+    let date = new Date(timeStamp);
+    return (
+      date.getDate() +
+      "/" +
+      (date.getMonth() + 1) +
+      "/" +
+      date.getFullYear() +
+      " " +
+      date.getHours() +
+      ":" +
+      date.getMinutes() +
+      ":" +
+      date.getSeconds()
+    );
+  };
 
   const { isLoading, data } = useGetChartData(cryptoName, dataInterval, {
     refetchInterval: 60000,
@@ -56,10 +73,9 @@ const ChartData = ({ cryptoName, isExpanded }) => {
       data?.prices?.map((item) => ({
         x: item[0],
         y: item[1],
-      }
-      )),
+      })),
   });
-  //console.log(data.prices,"價格")
+
   return (
     <div className="chart">
       <div className="chart-actions">
@@ -96,13 +112,14 @@ const ChartData = ({ cryptoName, isExpanded }) => {
           domainPadding={5}
           containerComponent={
             <VictoryVoronoiContainer
-              labels={({ datum }) => formatPrice(datum.y)} // Format the price
+              // labels={({ datum }) =>  formatPrice(datum.y)}
+              labels={({ datum }) =>  `${formatPrice(datum._voronoiY)},${formatDate(datum._voronoiX)}`} // Format the price
               title={`${cryptoName} price data chart`} // For screen readers
               labelComponent={
                 <VictoryTooltip
                   style={{
                     fill: "#333",
-                    fontSize: 25,
+                    fontSize: 15,
                   }}
                   flyoutStyle={{
                     fill: "#fff",
@@ -119,7 +136,7 @@ const ChartData = ({ cryptoName, isExpanded }) => {
             style={{
               data: {
                 stroke: "#fff",
-                strokeWidth: 2,
+                strokeWidth: 1.5,
               },
             }}
             data={data}
