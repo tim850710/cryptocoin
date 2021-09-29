@@ -11,7 +11,6 @@ import format from "date-fns/format";
 import { formatPrice } from "./CryptoTracker";
 
 const intervals = [
-  
   {
     label: "1D",
     value: 1,
@@ -28,7 +27,10 @@ const intervals = [
     label: "3M",
     value: 90,
   },
-  
+  {
+    label: "MAX",
+    value: "max",
+  },
 ];
 
 const useGetChartData = (cryptoName, interval, options) => {
@@ -110,7 +112,9 @@ const ChartData = ({ cryptoName, isExpanded }) => {
           containerComponent={
             <VictoryVoronoiContainer
               // labels={({ datum }) =>  formatPrice(datum.y)}
-              labels={({ datum }) =>  `${formatPrice(datum._voronoiY)},${formatDate(datum._voronoiX)}`} // Format the price
+              labels={({ datum }) =>
+                `${formatPrice(datum._voronoiY)},${formatDate(datum._voronoiX)}`
+              } // Format the price
               title={`${cryptoName} price data chart`} // For screen readers
               labelComponent={
                 <VictoryTooltip
