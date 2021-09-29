@@ -23,7 +23,14 @@ const intervals = [
     label: "1M",
     value: 30,
   },
- 
+  {
+    label: "3M",
+    value: 90,
+  },
+  {
+    label: "MAX",
+    value: "max",
+  },
 ];
 
 const useGetChartData = (cryptoName, interval, options) => {
